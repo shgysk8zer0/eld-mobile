@@ -9,27 +9,30 @@
 				<fieldset>
 					<legend>Sign In</legend>
 					<label for="register-user" class="block form-control" title="User ID">
-						<svg class="current-color icon">
-							<use xlink:href="img/icons.svg#avatar-default" />
+						<svg class="current-color icon" viewBox="0 0 16 16">
+							<path d="M10.555 8.094C9.849 8.717 9.015 9 8 9c-1.016 0-1.853-.29-2.559-.914-1.109.363-2.436 1.288-2.437 2.902L3 14c0 .554.446 1 1 1h8c.554 0 1-.446 1-1v-3c0-1.387-1.102-2.556-2.445-2.906z"/>
+					    <path d="M11 5a3 3 0 1 1-6 0 3 3 0 1 1 6 0z" overflow="visible"/>
 						</svg>
 						<input type="text" name="driver_code" placeholder="User ID" minlength="5" maxlength="5" autocomplete="username" required="" />
 					</label>
 					<label for="login-pin" class="block form-control" title="User PIN">
-						<svg class="current-color icon">
-							<use xlink:href="img/icons.svg#dialog-password" />
+						<svg class="current-color icon" viewBox="0 0 16 16">
+							<path d="M5 3C2.25 3 0 5.25 0 8s2.25 5 5 5c1.586 0 2.903-.845 3.813-2h5.593l.22-.75 1.03-4L15.97 5H8.813C7.903 3.845 6.586 3 5 3zm0 2c1.116 0 2.038.595 2.563 1.5l.312.5h5.531l-.53 2H7.874l-.312.5C7.038 10.405 6.116 11 5 11c-1.669 0-3-1.331-3-3s1.331-3 3-3z" overflow="visible"/>
+					    <path d="M14.498 8H9l-.563 2H14z" opacity=".35" overflow="visible"/>
+					    <path d="M5 8a1 1 0 1 1-2 0 1 1 0 1 1 2 0z" overflow="visible"/>
 						</svg>
 						<input type="password" name="driver_pin" placeholder="####" minlength="4" maxlength="4" pattern="\d+" autocomplete="new-password" required="" />
 					</label>
 				</fieldset>
 				<input type="hidden" name="eld" value="1" />
 				<button type="submit" class="btn btn-accept">
-					<svg class="current-color icon">
-						<use xlink:href="img/icons.svg#sign-in" />
+					<svg class="current-color icon" viewBox="0 0 14 16">
+						<path fill-rule="evenodd" d="M7 6.75V12h4V8h1v4c0 .55-.45 1-1 1H7v3l-5.45-2.72c-.33-.17-.55-.52-.55-.91V1c0-.55.45-1 1-1h9c.55 0 1 .45 1 1v3h-1V1H3l4 2v2.25L10 3v2h4v2h-4v2L7 6.75z"/>
 					</svg>
 				</button>
 				<button type="reset" data-close="#login-dialog" class="btn btn-reject">
-					<svg class="current-color icon">
-						<use xlink:href="img/icons.svg#x" />
+					<svg class="current-color icon" viewBox="0 0 12 16">
+						<path fill-rule="evenodd" d="M7.48 8l3.75 3.75-1.48 1.48L6 9.48l-3.75 3.75-1.48-1.48L4.52 8 .77 4.25l1.48-1.48L6 6.52l3.75-3.75 1.48 1.48L7.48 8z"/>
 					</svg>
 				</button>
 			</form>

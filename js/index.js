@@ -2,7 +2,7 @@ import './std-js/deprefixer.js';
 import './std-js/shims.js';
 import {$, ready, registerServiceWorker} from './std-js/functions.js';
 import {confirm} from './std-js/asyncDialog.js';
-import {login, loginWithCreds, loginHandler, logoutHandler, loadImports} from './functions.js';
+import {login, loginWithCreds, loginHandler, logoutHandler, loadImports, emailSubmitHandler} from './functions.js';
 registerServiceWorker(document.documentElement.dataset.serviceWorker).catch(console.error);
 
 ready().then(async () => {
@@ -54,6 +54,8 @@ ready().then(async () => {
 		const data = Object.fromEntries(new FormData(event.target).entries());
 		login(data).then(() => event.target.reset());
 	});
+
+	document.forms.sendEmail.addEventListener('submit', emailSubmitHandler);
 
 	$('dialog form').reset(event => event.target.closest('dialog').close());
 

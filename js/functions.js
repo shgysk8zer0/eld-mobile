@@ -7,6 +7,14 @@ export async function loadImports() {
 	imports.forEach(doc => document.body.append(...doc.content.body.children));
 }
 
+export async function emailSubmitHandler(event) {
+	event.preventDefault();
+	const data = Object.fromEntries(new FormData(event.target).entries());
+	console.log(data);
+	event.target.reset();
+	return data;
+}
+
 export async function whenOnline() {
 	if (! navigator.onLine) {
 		await new Promise(resolve => {
@@ -169,6 +177,7 @@ export async function getEldLog({
 					value: endDate.toISOString().split('T')[0],
 					max: now,
 				});
+				$('[data-click="email"]', table).click(() => $('#email-dialog').showModal());
 				table.tBodies.item(0).append(...rows);
 				$('form', form).submit(async event => {
 					event.preventDefault();
