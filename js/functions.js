@@ -178,6 +178,10 @@ export async function getEldLog({
 					max: now,
 				});
 				$('[data-click="email"]', table).click(() => $('#email-dialog').showModal());
+				$('form[name="sendEmail"] [name="driverid"]').attr({value: driverid});
+				$('form[name="sendEmail"] [name="fromdate"]').attr({value: startDate.toISOString()});
+				$('form[name="sendEmail"] [name="thrudate"]').attr({value: endDate.toISOString()});
+				$('form[name="sendEmail"] [name="token"]').attr({value: token});
 				table.tBodies.item(0).append(...rows);
 				$('form', form).submit(async event => {
 					event.preventDefault();
