@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr" class="no-js scrollbar-thin scrollbar-light" data-service-worker="service-worker.js" itemtype="http://schema.org/WebPage" itemref="org-info" itemscope="">
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width" />
+		<meta name="description" content="Toggle vehicle tracking for SentinelPro" />
+		<meta itemprop="description" content="Toggle vehicle tracking for SentinelPro" />
+		<meta name="keywords" content="vrmt, Sentinel, tracking" />
+		<meta itemprop="keywords" content="vrmt, Sentinel, tracking" />
+		<meta name="referrer" content="origin-when-cross-origin" />
+		<!-- <meta itemprop="thumbnailUrl" content="" /> -->
+		<meta name="mobile-web-app-capable" content="yes" />
+		<meta name="theme-color" content="#2d89ef" />
+		<meta name="msapplication-config" content="./browserconfig.xml" />
+		<meta name="msapplication-TileImage" content="./img/mstile-150x150.png" />
+		<!-- Open Graph (Facebook) -->
+		<meta property="og:type" content="website" />
+		<meta property="og:title" content="Sentinel ELD Log" />
+		<meta property="og:site_name" content="Sentinel ELD Log" />
+		<!-- <meta property="og:url" content="" />
+		<meta property="og:image" content="" /> -->
+		<meta property="og:description" content="ELD Log for SentinelPro" />
+		<meta property="og:locale" content="en_US" />
+		<!-- End Open Graph -->
+		<!-- Twitter Card -->
+		<meta name="twitter:site" content="DrvWithSentinel" />
+		<meta name="twitter:title" content="Sentinel Driver" />
+		<meta name="twitter:description" content="ELD Log for SentinelPro" />
+		<!-- <meta name="twitter:image" content="" /> -->
+		<title itemprop="headline">Sentinel ELD Log</title>
+		<script src="https://cdn.polyfill.io/v2/polyfill.min.js" crossorigin="annonymous"></script>
+		<script type="module" src="js/index.js" async=""></script>
+		<script type="application/javascript" src="js/index.min.js" async="" nomodule=""></script>
+		<link rel="stylesheet" href="css/styles/index.css" media="all" />
+		<link rel="dns-prefetch" href="https://www.vrmtel.net" />
+		<link rel="icon" href="./img/favicon.svg" type="image/svg+xml" sizes="any" />
+		<link rel="icon" href="./img/icon-32.png" type="image/png" sizes="32x32" />
+		<link rel="icon" href="./img/icon-16.png" type="image/png" sizes="16x16" />
+		<link rel="apple-touch-icon" href="./img/apple-touch-icon.png" sizes="180x180" />
+		<link rel="mask-icon" href="./img/safari-pinned-tab.svg" color="#2d89ef" />
+		<link rel="manifest" href="./manifest.json" />
+		<link rel="import" name="login-dialog" href="components/login-dialog.html" />
+		<link rel="import" name="eld-table-template" href="components/eld-table-template.html" />
+		<link rel="import" name="eld-row-template" href="components/eld-row-template.html" />
+		<link rel="import" name="eld-date-search-template" href="components/eld-date-search-template.html" />
+	</head>
+	<body class="background-primary color-default font-main border-box smooth-scroll grid">
+		<header id="header" class="background-cover background-center background-no-repeat background-fixed"></header>
+		<nav id="nav">
+			<button type="button" class="btn btn-primary" title="Sign In" data-click="login" hidden="">
+				<svg class="current-color icon">
+					<use xlink:href="img/icons.svg#sign-in" />
+				</svg>
+			</button>
+			<!-- <button type="button" class="btn btn-primary" title="Register" data-click="register" hidden=""> -->
+			<!-- 	<svg class="current-color icon"> -->
+			<!-- 		<use xlink:href="img/icons.svg#contact-new" /> -->
+			<!-- 	</svg> -->
+			<!-- </button> -->
+			<button type="button" class="btn btn-primary" title="Sign Out" data-click="logout" hidden="">
+				<svg class="current-color icon">
+					<use xlink:href="img/icons.svg#sign-out" />
+				</svg>
+			</button>
+		</nav>
+		<main></main>
+		<footer id="footer" class="relative z-1 color-alt" role="contentinfo">
+			<div id="org-info" itemprop="copyrightHolder" itemtype="http://schema.org/Organization" itemscope="">
+				<h3>
+					<a href="https://www.drivewithsentinel.com/" itemprop="url">
+						<meta itemprop="name" content="Sentinel" />
+						<img itemprop="image" src="./img/logo.png" alt="Sentinel" />
+					</a>
+				</h3>
+				<div class="contact-links">
+					<div>
+						<a href="tel:+1-661-249-4393" class="inline-block" content="+1-661-249-4393" itemprop="telephone" title="661-249-4393">
+							<svg class="current-color icon">
+								<use xlink:href="img/icons.svg#call-start" />
+							</svg>
+							<span>661-249-4393</span>
+						</a>
+					</div>
+					<div>
+						<a href="mailto:info@drivewithsentinel.com" class="inline-block" itemprop="email" content="info@drivewithsentinel.com" title="info@drivewithsentinel.com">
+							<svg class="current-color icon">
+								<use xlink:href="img/icons.svg#mail-read" />
+							</svg>
+							<span>info@drivewithsentinel.com</span>
+						</a>
+					</div>
+				</div>
+				<address itemprop="address" itemtype="http://schema.org/PostalAddress" itemscope="">
+					<div itemprop="streetAddress">27240 Turnberry Lane Suite 200</div>
+					<div>
+						<span itemprop="addressLocality">Valencia</span>,
+						<span itemprop="addressRegion">CA</span>
+						<span itemprop="postalCode">91355</span>
+						<meta itemprop="addressCountry" content="USA" />
+				</address>
+				<hr />
+				<div class="social-icons flex row no-wrap">
+					<a href="https://www.facebook.com/Drive-With-Sentinel-746644742040088/" target="_blank" itemprop="sameAs" class="social-link inline-block" rel="noreferrer external" title="Facebook">
+						<svg class="icon">
+							<use xlink:href="img/icons.svg#facebook" />
+						</svg>
+					</a>
+					<a href="https://www.linkedin.com/company-beta/7602851?pathWildcard=7602851" target="_blank" itemprop="sameAs" class="social-link inline-block" rel="noreferrer external" title="LinkedIn">
+						<svg class="icon">
+							<use xlink:href="img/icons.svg#linkedin" />
+						</svg>
+					</a>
+					<a href="https://twitter.com/DrvWithSentinel" target="_blank" itemprop="sameAs" class="social-link inline-block" rel="noreferrer external" title="Twitter">
+						<svg class="icon">
+							<use xlink:href="img/icons.svg#twitter" />
+						</svg>
+					</a>
+				</div>
+			</div>
+			<span>&copy;</span>
+			<time>2015</time>
+			<span>&mdash;</span>
+			<time itemprop="copyrightYear">2018</time>
+			<strong>All Rights Reserved</strong>
+		</footer>
+		<dialog id="loading-dialog" class="background-none no-border color-alt center">
+			<svg class="animation-spin animation-speed-normal animation-linear animation-infinite transform-origin-center current-color filter-shadow">
+				<use xlink:href="img/icons.svg#view-refresh" />
+			</svg>
+		</dialog>
+</html>

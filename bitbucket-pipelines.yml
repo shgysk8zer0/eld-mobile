@@ -1,0 +1,67 @@
+# This is a sample build configuration for JavaScript.
+# Check our guides at https://confluence.atlassian.com/x/14UWN for more examples.
+# Only use spaces to indent your .yml configuration.
+# -----
+# You can specify a custom docker image from Docker Hub as your build environment.
+image: node:8.11.4
+clone:
+  lfs: true
+pipelines:
+  default:
+    - step:
+        name: Test
+        deployment: test
+        caches:
+          - node
+        script:
+          - npm run preinstall
+          - npm install
+          - npm run postinstall
+          - npm test
+  branches:
+    master:
+      - step:
+          name: Install
+          deployment: staging
+          caches:
+            - node
+          artifacts:
+            - fonts/**
+            - css/core-css/**
+            - css/animate.css/**
+            - css/normalize/**
+            - img/adwaita-icons/**
+            - img/logos/**
+            - img/octicons/**
+            - js/std-js/**
+            - img/icons.svg
+            - js/*.min
+            - js/*.map
+            - css/*.min
+            - css/*.map
+          script:
+            - npm run preinstall
+            - npm run postinstall
+      - step:
+          name: Deploy
+          deployment: production
+          caches:
+            - node
+          artifacts:
+            - fonts/**
+            - css/core-css/**
+            - css/animate.css/**
+            - css/normalize/**
+            - img/adwaita-icons/**
+            - img/logos/**
+            - img/octicons/**
+            - js/std-js/**
+            - img/icons.svg
+            - js/*.min
+            - js/*.map
+            - css/*.min
+            - css/*.map
+          script:
+            - npm run preinstall
+            - apt-get update && apt-get install -y rsync
+            - rsync --exclude-from $BITBUCKET_CLONE_DIR/$DEPLOY_IGNORE -r --progress --delete -s $BITBUCKET_CLONE_DIR/ $DEPLOY_USER@$DEPLOY_HOST:$DEPLOY_PATH

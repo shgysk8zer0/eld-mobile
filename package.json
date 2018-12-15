@@ -1,0 +1,65 @@
+{
+  "name": "sentinel-eld",
+  "version": "1.0.0",
+  "author": "Chris Zuber <shgysk8zer0@gmail.com>",
+  "license": "MIT",
+  "private": true,
+  "description": "Webservice for driver ELD log access",
+  "keywords": [
+    "sentinel",
+    "vrmt",
+    "scfs",
+    "eld"
+  ],
+  "config": {
+    "serve": {
+      "domain": "localhost",
+      "port": {
+        "dev": 8000
+      }
+    },
+    "dir": {
+      "css": "css/styles/",
+      "js": "js/",
+      "img": "img/"
+    }
+  },
+  "scripts": {
+    "preinstall": "git submodule update --init --recursive",
+    "postinstall": "npm run build",
+    "start": "python -m SimpleHTTPServer ${npm_package_config_serve_port_dev}",
+    "test": "npm run lint:js && npm run lint:css",
+    "build": "npm run build:icons && npm run build:css && npm run build:js",
+    "build:css": "postcss ${npm_package_config_dir_css}index.css -o ${npm_package_config_dir_css}index.min.css",
+    "build:icons": "svg-sprite-generate -c icons.csv -o ${npm_package_config_dir_img}icons.svg",
+    "build:js": "webpack",
+    "lint:css": "stylelint ${npm_package_config_dir_css}",
+    "lint:js": "eslint ${npm_package_config_dir_js}"
+  },
+  "devDependencies": {
+    "eslint": "^5.7.0",
+    "eslint-plugin-async-await": "0.0.0",
+    "eslint-plugin-babel": "^5.2.1",
+    "stylelint": "^9.6.0",
+    "stylelint-config-recommended": "^2.1.0",
+    "stylelint-config-standard": "^18.2.0",
+    "svgo": "^1.1.1"
+  },
+  "dependencies": {
+    "@babel/core": "^7.1.2",
+    "@babel/plugin-transform-runtime": "^7.1.0",
+    "@babel/preset-env": "^7.1.0",
+    "@babel/runtime": "^7.1.2",
+    "babel-loader": "^8.0.4",
+    "cssnano": "^4.1.7",
+    "cssnano-preset-default": "^4.0.5",
+    "postcss": "^7.0.5",
+    "postcss-cli": "^6.0.1",
+    "postcss-import": "^12.0.1",
+    "postcss-preset-env": "^6.2.0",
+    "postcss-url": "^8.0.0",
+    "svg-sprite-generator": "0.0.7",
+    "webpack": "^4.23.0",
+    "webpack-cli": "^3.1.2"
+  }
+}

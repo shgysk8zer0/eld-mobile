@@ -1,0 +1,39 @@
+# https://www.netlify.com/docs/netlify-toml-reference/
+[build]
+  base = "./"
+  publish = "./"
+  command = "npm run build"
+  [build.environment]
+    GIT_LFS_ENABLED = "1"
+[[headers]]
+  for="/*"
+  [headers.values]
+    Link = '''
+      </css/styles/index.min.css>; rel=preload; as=style, \
+      </css/js/index.min.js>; rel=preload; as=script, \
+      </img/icons.svg>; rel=preload; as=image
+    '''
+    X-Frame-Options = "DENY"
+    X-XSS-Protection = "1; mode=block"
+    X-Content-Type-Options = "nosniff"
+    Referrer-Policy = "no-referrer-when-downgrade"
+    Strict-Transport-Security = "max-age=31536000"
+    Content-Security-Policy = '''
+      default-src 'self';
+      img-src * blob: data:;
+      script-src 'self' https://cdn.polyfill.io;
+      style-src 'self' 'unsafe-inline' https://www.youtube.com https://www.youtube-nocookie.com;
+      connect-src 'self';
+      font-src 'self';
+      media-src *;
+      child-src 'self' https://www.youtube.com https://www.youtube-nocookie.com;
+      report-uri https://superuser.report-uri.com/r/d/csp/enforce;
+      block-all-mixed-content;
+      upgrade-insecure-requests;
+      disown-opener;
+      reflected-xss block;
+      manifest-src 'self';
+      form-action 'self';'''
+# [[redirects]]
+  # from = ""
+  # to = ""

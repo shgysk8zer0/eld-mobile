@@ -1,0 +1,14 @@
+#footer {
+	grid-area: footer;
+	padding: 2rem;
+	background-color: #2E2E2E;
+}
+
+#footer .social-link {
+	padding: 0.3rem;
+}
+
+#footer .social-link {
+	margin-right: 0.6em;
+	font-size: 1.8rem;
+}

@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+	<head>
+		<meta charset="utf-8" />
+	</head>
+	<body>
+		<dialog id="login-dialog" class="animation-speed-normal animation-ease-in-out fadeIn">
+			<form name="login" action="https://www.vrmtel.net/api/v1/slapi.php/" method="POST">
+				<fieldset>
+					<legend>Sign In</legend>
+					<label for="register-user" class="block form-control" title="User ID">
+						<svg class="current-color icon">
+							<use xlink:href="img/icons.svg#avatar-default" />
+						</svg>
+						<input type="text" name="driver_code" placeholder="User ID" minlength="5" maxlength="5" autocomplete="username" required="" />
+					</label>
+					<label for="login-pin" class="block form-control" title="User PIN">
+						<svg class="current-color icon">
+							<use xlink:href="img/icons.svg#dialog-password" />
+						</svg>
+						<input type="password" name="driver_pin" placeholder="####" minlength="4" maxlength="4" pattern="\d+" autocomplete="new-password" required="" />
+					</label>
+				</fieldset>
+				<input type="hidden" name="eld" value="1" />
+				<button type="submit" class="btn btn-accept">
+					<svg class="current-color icon">
+						<use xlink:href="img/icons.svg#sign-in" />
+					</svg>
+				</button>
+				<button type="reset" data-close="#login-dialog" class="btn btn-reject">
+					<svg class="current-color icon">
+						<use xlink:href="img/icons.svg#x" />
+					</svg>
+				</button>
+			</form>
+		</dialog>
+	</body>
+</html>

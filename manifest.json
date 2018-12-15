@@ -1,0 +1,33 @@
+{
+	"version": "1.0.0",
+	"name": "Sentinel Tracking",
+	"short_name": "Sentinel Trk",
+	"description": "Toggle vehicle tracking for SentinelPro",
+	"start_url": ".",
+	"lang": "en",
+	"display": "standalone",
+	"theme_color": "#2d89ef",
+	"background_color": "#FEFEFE",
+	"icons": [{
+    "src": "./img/favicon.svg",
+    "type": "image/svg+xml",
+    "sizes": "any"
+  }, {
+    "src": "./img/icon-512.png",
+    "type": "image/png",
+    "sizes": "512x512"
+  }, {
+    "src": "./img/icon-192.png",
+    "type": "image/png",
+    "sizes": "192x192"
+  }],
+	"screenshots": [{
+    "src": "https://i.imgur.com/7XRe85Ml.jpg",
+    "type": "image/jpeg",
+    "sizes": "665x640"
+  }],
+	"developer": {
+		"name": "Chris Zuber",
+		"url": "http://shgysk8zer0.github.io"
+	}
+}

@@ -1,0 +1,47 @@
+@charset "UTF-8";
+@import url("./vars.css");
+@import url("../core-css/viewport.css");
+@import url("../normalize/normalize.css");
+@import url("../core-css/rem.css");
+@import url("../core-css/element.css");
+@import url("../core-css/class-rules.css");
+@import url("../core-css/fonts.css");
+@import url("../animate.css/animate.css");
+@import url("../core-css/animations.css");
+@import url("./layout.css");
+
+input {
+	line-height: 1.8;
+	font-size: 1.1em;
+	margin-bottom: 0.4em;
+}
+
+.btn-confirm {
+	background: var(--button-accept-background);
+}
+
+.btn-confirm:active {
+	background: var(--button-accept-active-backgound);
+}
+
+td, th {
+	padding: 0.3rem 0.5rem;
+}
+
+.bg-dimgray {
+	background-color: dimgray;
+}
+
+.animation-spin {
+	animation-name: spin;
+}
+
+dialog:not([open]) .animation-spin {
+	animation-play-state: paused;
+}
+
+@keyframes spin {
+	to {
+		transform: rotate(1turn);
+	}
+}

@@ -1,0 +1,16 @@
+main {
+	grid-area: main;
+	margin: 1.2rem;
+	grid-template-columns: repeat(auto-fill, minmax(100px, 350px));
+	grid-template-rows: repeat(auto-fill);
+	grid-gap: 0.3rem;
+}
+
+
+main .driver {
+	transition: transform 350ms ease-in-out;
+}
+
+main .driver:hover {
+	transform: scale(1.1);
+}

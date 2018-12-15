@@ -1,0 +1,5 @@
+#nav {
+	padding: 0.3rem;
+	grid-area: nav;
+	background-image: linear-gradient(#545454, #232323);
+}
