@@ -173,6 +173,26 @@ export async function getEldLog({
 					value: startDate.toISOString().split('T')[0],
 					max: now,
 				});
+				$('input[name="startDate"]', form).change(event => {
+					const input = event.target.form.querySelector('input[name="endDate"]');
+					const date = event.target.value;
+					if (input.value < date) {
+						input.value = date;
+					}
+					input.min = date;
+				}, {
+					passive: true,
+				});
+				$('input[name="endDate"]', form).change(event => {
+					const input = event.target.form.querySelector('input[name="startDate"]');
+					const date = event.target.value;
+					if (input.value > date) {
+						input.value = date;
+					}
+					input.max = event.target.value;
+				}, {
+					passive: true,
+				});
 				$('input[name="endDate"]', form).attr({
 					value: endDate.toISOString().split('T')[0],
 					max: now,
