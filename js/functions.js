@@ -215,7 +215,7 @@ export async function getEldLog({
 					getEldLog(data);
 				});
 				$('main table, main form').remove();
-				document.querySelector('main').append(form, content);
+				document.querySelector('main').append(content, form);
 			}
 		} else {
 			throw new Error(`${resp.url} [${resp.status} ${resp.statusText}]`);
