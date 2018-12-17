@@ -139,7 +139,7 @@ export async function getEldLog({
 				const form = document.getElementById('eld-date-search-template').content.cloneNode(true);
 				const table = content.querySelector('table');
 				const rowTemplate = document.getElementById('eld-row-template').content;
-				const rows = json.map(entry => {
+				const data = json.map(entry => {
 					return {
 						driverId: parseInt(entry.driverid),
 						driver: entry.name,
@@ -150,7 +150,8 @@ export async function getEldLog({
 						location: entry.location,
 						mapLink: new URL(`https://www.google.com/maps/place/${entry.latitude},${entry.longitude}`),
 					};
-				}).map(entry => {
+				});
+				const rows = data.map(entry => {
 					const row = rowTemplate.cloneNode(true);
 					$('[data-field]', row).each(cell => {
 						const prop = cell.dataset.field;
@@ -167,6 +168,8 @@ export async function getEldLog({
 
 					return row;
 				});
+
+				$('[data-field="driver"]', content).text(data[0].driver);
 				$('input[name="token"]', form).attr({value: token});
 				$('input[name="driverid"]', form).attr({value: driverid});
 				$('input[name="startDate"]', form).attr({
