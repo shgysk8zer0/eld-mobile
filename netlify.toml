@@ -23,7 +23,7 @@
       img-src * blob: data:;
       script-src 'self' https://cdn.polyfill.io;
       style-src 'self' 'unsafe-inline' https://www.youtube.com https://www.youtube-nocookie.com;
-      connect-src 'self';
+      connect-src 'self' https://www.vrmtel.net/;
       font-src 'self';
       media-src *;
       child-src 'self' https://www.youtube.com https://www.youtube-nocookie.com;
