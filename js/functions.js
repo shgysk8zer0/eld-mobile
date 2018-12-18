@@ -1,6 +1,5 @@
 import {API, ICONS} from './consts.js';
 import {notify, $, getImports} from './std-js/functions.js';
-import {TOKEN, DRIVERID} from './consts.private.js';
 
 export async function loadImports() {
 	const imports = await getImports();
@@ -46,6 +45,7 @@ export async function loginWithCreds() {
 export async function login({
 	driver_code,
 	driver_pin,
+	eld = '1',
 	store = true,
 } = {}) {
 	const url = new URL('driver_signin', API);
@@ -61,7 +61,7 @@ export async function login({
 			headers,
 			method: 'POST',
 			mode: 'cors',
-			body: JSON.stringify([{driver_code, driver_pin}]),
+			body: JSON.stringify([{driver_code, driver_pin, eld}]),
 			cache: 'no-cache',
 		});
 
@@ -72,7 +72,8 @@ export async function login({
 			} else {
 				document.dispatchEvent(new CustomEvent('login', {
 					detail: {
-						driverId: driver_code,
+						driverCode: driver_code,
+						driverId: parseInt(json.driverid),
 						driverName: json.driversname,
 						token: json.token,
 						tracking: json.tracking === '1',
@@ -107,7 +108,7 @@ export async function login({
 }
 
 export async function getEldLog({
-	driverid  = NaN,
+	driverid  = sessionStorage.getItem('driverId') || NaN,
 	startDate = null,
 	endDate   = new Date(),
 	token     = sessionStorage.getItem('token'),
@@ -117,7 +118,7 @@ export async function getEldLog({
 	if (endDate instanceof Date && startDate === null) {
 		startDate = new Date(Date.parse(endDate) - 86400000); // Defaults to 24 hours ago
 	}
-	const url =  new URL(`r_eldlog/${driverid}/${startDate.toISOString()}/${endDate.toISOString()}/${token}`, API);
+	const url =  new URL(`m_eldlog/${driverid}/${startDate.toISOString()}/${endDate.toISOString()}/${token}`, API);
 	const headers = new Headers();
 	headers.set('Accept', 'application/json');
 	spinner.showModal();
@@ -136,7 +137,19 @@ export async function getEldLog({
 				throw new Error(`${json.message} [${json.error}]`);
 			} else {
 				const content = document.getElementById('eld-table-template').content.cloneNode(true);
+				const list = content.querySelector('#locations-list');
 				const form = document.getElementById('eld-date-search-template').content.cloneNode(true);
+				const search = content.querySelector('form[name="locationSearch"]');
+				search.addEventListener('submit', event => event.preventDefault());
+				search.querySelector('input[type="search"]').addEventListener('change', event => {
+					const table = event.target.closest('table');
+					[...table.tBodies.item(0).rows].forEach(async row => {
+						const loc = row.querySelector('[data-field="location"]');
+						row.hidden = ! loc.textContent.startsWith(event.target.value);
+					});
+				}, {
+					passive: true,
+				});
 				const table = content.querySelector('table');
 				const rowTemplate = document.getElementById('eld-row-template').content;
 				const data = json.map(entry => {
@@ -151,6 +164,12 @@ export async function getEldLog({
 						mapLink: new URL(`https://www.google.com/maps/place/${entry.latitude},${entry.longitude}`),
 					};
 				});
+				const listOpts = [...new Set(data.map(item => item.location))].filter(item => item !== '').map(item => {
+					const opt = document.createElement('option');
+					opt.value = item;
+					return opt;
+				});
+				list.append(...listOpts);
 				const rows = data.map(entry => {
 					const row = rowTemplate.cloneNode(true);
 					$('[data-field]', row).each(cell => {
@@ -228,6 +247,7 @@ export async function getEldLog({
 
 export function loginHandler(event) {
 	if (event.detail !== null && event.detail.hasOwnProperty('token')) {
+		sessionStorage.setItem('driverCode', event.detail.driverCode);
 		sessionStorage.setItem('driverId', event.detail.driverId);
 		sessionStorage.setItem('driverName', event.detail.driverName);
 		sessionStorage.setItem('token', event.detail.token);
@@ -238,8 +258,8 @@ export function loginHandler(event) {
 	$('[data-click="login"], [data-click="register"]').hide();
 	$('[data-click="logout"]').unhide();
 	getEldLog({
-		token: TOKEN,
-		driverid: DRIVERID,
+		token: sessionStorage.getItem('token'),
+		driverid: sessionStorage.getItem('driverId'),
 	});
 }
 

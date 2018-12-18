@@ -18,6 +18,15 @@
 						<abbr title="Electronic Logging Device">ELD</abbr>
 						<span>Log</span>
 					</h3>
+					<form name="locationSearch">
+						<input type="search" name="location" placeholder="123 Some St." list="locations-list" autocomplete="off" required="" />
+						<button type="reset" class="btn btn-reject">
+							<svg class="current-color icon" viewBox="0 0 12 16">
+								<path fill-rule="evenodd" d="M7.48 8l3.75 3.75-1.48 1.48L6 9.48l-3.75 3.75-1.48-1.48L4.52 8 .77 4.25l1.48-1.48L6 6.52l3.75-3.75 1.48 1.48L7.48 8z" />
+							</svg>
+						</button>
+						<datalist id="locations-list"></datalist>
+					</form>
 				</caption>
 				<thead class="bg-dimgray color-alt sticky top z-2">
 					<tr>

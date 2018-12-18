@@ -59,7 +59,7 @@ ready().then(async () => {
 
 	$('dialog form').reset(event => event.target.closest('dialog').close());
 
-	if (sessionStorage.hasOwnProperty('driverId')) {
+	if (sessionStorage.hasOwnProperty('token')) {
 		document.dispatchEvent(new CustomEvent('login'));
 	} else {
 		$('[data-click="login"], [data-click="register"]').unhide();
