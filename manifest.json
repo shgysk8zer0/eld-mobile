@@ -1,8 +1,8 @@
 {
 	"version": "1.0.0",
-	"name": "Sentinel Tracking",
-	"short_name": "Sentinel Trk",
-	"description": "Toggle vehicle tracking for SentinelPro",
+	"name": "Sentinel Electronic Logging Device Logs",
+	"short_name": "Sentinel ELD",
+	"description": "Webservice for driver ELD log access",
 	"start_url": ".",
 	"lang": "en",
 	"display": "standalone",
