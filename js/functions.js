@@ -141,6 +141,7 @@ export async function getEldLog({
 				const form = document.getElementById('eld-date-search-template').content.cloneNode(true);
 				const search = content.querySelector('form[name="locationSearch"]');
 				search.addEventListener('submit', event => event.preventDefault());
+				search.addEventListener('reset', event => [...event.target.closest('table').tBodies.item(0).rows].forEach(row => row.hidden = false));
 				search.querySelector('input[type="search"]').addEventListener('change', event => {
 					const table = event.target.closest('table');
 					[...table.tBodies.item(0).rows].forEach(async row => {
