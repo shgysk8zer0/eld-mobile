@@ -188,7 +188,7 @@ export async function getEldLog({
 
 				$('form[name="locationSearch"]', search).submit(event => event.preventDefault());
 				$('form[name="locationSearch"]', search).reset(event => {
-					[...event.target.closest('table').tBodies.item(0).rows].forEach(row => row.hidden = false)
+					[...event.target.closest('table').tBodies.item(0).rows].forEach(row => row.hidden = false);
 				});
 
 				$('input[type="search"]', search).change(event => {
