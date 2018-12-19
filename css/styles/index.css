@@ -40,6 +40,14 @@ td, th {
 	width: 100%;
 }
 
+table > tbody > tr:nth-child(even) {
+	background-color: #eee;
+}
+
+table > tbody > tr:nth-child(odd) {
+	background-color: #ddd;
+}
+
 dialog:not([open]) .animation-spin {
 	animation-play-state: paused;
 }
