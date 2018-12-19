@@ -2,8 +2,16 @@ import './std-js/deprefixer.js';
 import './std-js/shims.js';
 import {$, ready, registerServiceWorker} from './std-js/functions.js';
 import {confirm} from './std-js/asyncDialog.js';
-import {login, loginWithCreds, loginHandler, logoutHandler, loadImports, emailSubmitHandler} from './functions.js';
+import {login, loginWithCreds, loginHandler, logoutHandler, loadImports, emailSubmitHandler, setTableData, isLoggedIn} from './functions.js';
 registerServiceWorker(document.documentElement.dataset.serviceWorker).catch(console.error);
+window.isLoggedIn = isLoggedIn;
+
+window.addEventListener('popstate', async event => {
+	console.log(event);
+	if (sessionStorage.hasOwnProperty('token')) {
+		setTableData(event.state);
+	}
+});
 
 ready().then(async () => {
 	const $docEl = $(document.documentElement);
@@ -59,7 +67,7 @@ ready().then(async () => {
 
 	$('dialog form').reset(event => event.target.closest('dialog').close());
 
-	if (sessionStorage.hasOwnProperty('token')) {
+	if (isLoggedIn()) {
 		document.dispatchEvent(new CustomEvent('login'));
 	} else {
 		$('[data-click="login"], [data-click="register"]').unhide();
