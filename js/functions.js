@@ -1,5 +1,6 @@
 import {API, ICONS} from './consts.js';
 import {notify, $, getImports} from './std-js/functions.js';
+import {alert} from './std-js/functions.js';
 
 export async function loadImports() {
 	const imports = await getImports();
@@ -102,6 +103,7 @@ export async function login({
 		}
 	} catch(err) {
 		console.error(err);
+		alert(err.message);
 	} finally {
 		spinner.close();
 	}
@@ -137,27 +139,18 @@ export async function getEldLog({
 				throw new Error(`${json.message} [${json.error}]`);
 			} else {
 				const content = document.getElementById('eld-table-template').content.cloneNode(true);
-				const list = content.querySelector('#locations-list');
 				const form = document.getElementById('eld-date-search-template').content.cloneNode(true);
-				const search = content.querySelector('form[name="locationSearch"]');
-				search.addEventListener('submit', event => event.preventDefault());
-				search.addEventListener('reset', event => [...event.target.closest('table').tBodies.item(0).rows].forEach(row => row.hidden = false));
-				search.querySelector('input[type="search"]').addEventListener('change', event => {
-					const table = event.target.closest('table');
-					[...table.tBodies.item(0).rows].forEach(async row => {
-						const loc = row.querySelector('[data-field="location"]');
-						row.hidden = ! loc.textContent.includes(event.target.value);
-					});
-				}, {
-					passive: true,
-				});
+				const search = document.getElementById('address-search-template').content.cloneNode(true);
+				const list = search.querySelector('#locations-list');
 				const table = content.querySelector('table');
 				const rowTemplate = document.getElementById('eld-row-template').content;
+
 				const data = json.map(entry => {
 					return {
 						driverId: parseInt(entry.driverid),
 						driver: entry.name,
 						datetime: new Date(entry.cdatetime),
+						duration: entry.triptime.replace(/^00?:?0?/, ''),
 						type: entry.alert,
 						latitude: parseFloat(entry.latitude),
 						longitude: parseFloat(entry.longitude),
@@ -165,12 +158,7 @@ export async function getEldLog({
 						mapLink: new URL(`https://www.google.com/maps/place/${entry.latitude},${entry.longitude}`),
 					};
 				});
-				const listOpts = [...new Set(data.map(item => item.location))].filter(item => item !== '').map(item => {
-					const opt = document.createElement('option');
-					opt.value = item;
-					return opt;
-				});
-				list.append(...listOpts);
+
 				const rows = data.map(entry => {
 					const row = rowTemplate.cloneNode(true);
 					$('[data-field]', row).each(cell => {
@@ -179,6 +167,9 @@ export async function getEldLog({
 							const val = entry[prop];
 							if (val instanceof Date) {
 								cell.textContent = val.toLocaleString();
+								if (cell instanceof HTMLTimeElement) {
+									cell.dateTime = val.toISOString();
+								}
 							} else {
 								cell.textContent = val;
 							}
@@ -189,9 +180,40 @@ export async function getEldLog({
 					return row;
 				});
 
+				const listOpts = [...new Set(data.map(item => item.location))].filter(item => item !== '').map(item => {
+					const opt = document.createElement('option');
+					opt.value = item;
+					return opt;
+				});
+
+				list.append(...listOpts);
+				table.caption.append(search);
+				[...table.tHead.rows].forEach(row => {
+					const tr = row.cloneNode(true);
+					tr.classList.remove('sticky');
+					table.tHead.append(tr);
+				});
+
+				$('form', search).submit(event => event.preventDefault());
+				$('form', search).reset(event => [...event.target.closest('table').tBodies.item(0).rows].forEach(row => row.hidden = false));
+				$('input[type="search"]', search).change(event => {
+					const table = event.target.closest('table');
+					[...table.tBodies.item(0).rows].forEach(async row => {
+						const loc = row.querySelector('[data-field="location"]');
+						row.hidden = ! loc.textContent.includes(event.target.value);
+					});
+				}, {
+					passive: true,
+				});
+
 				$('[data-field="driver"]', content).text(data[0].driver);
 				$('input[name="token"]', form).attr({value: token});
 				$('input[name="driverid"]', form).attr({value: driverid});
+				$('[data-click="email"]', table).click(() => $('#email-dialog').showModal());
+				$('form[name="sendEmail"] [name="driverid"]').attr({value: driverid});
+				$('form[name="sendEmail"] [name="fromdate"]').attr({value: startDate.toISOString()});
+				$('form[name="sendEmail"] [name="thrudate"]').attr({value: endDate.toISOString()});
+				$('form[name="sendEmail"] [name="token"]').attr({value: token});
 				$('input[name="startDate"]', form).attr({
 					value: startDate.toISOString().split('T')[0],
 					max: now,
@@ -220,12 +242,6 @@ export async function getEldLog({
 					value: endDate.toISOString().split('T')[0],
 					max: now,
 				});
-				$('[data-click="email"]', table).click(() => $('#email-dialog').showModal());
-				$('form[name="sendEmail"] [name="driverid"]').attr({value: driverid});
-				$('form[name="sendEmail"] [name="fromdate"]').attr({value: startDate.toISOString()});
-				$('form[name="sendEmail"] [name="thrudate"]').attr({value: endDate.toISOString()});
-				$('form[name="sendEmail"] [name="token"]').attr({value: token});
-				table.tBodies.item(0).append(...rows);
 				$('form', form).submit(async event => {
 					event.preventDefault();
 					const data = Object.fromEntries(new FormData(event.target).entries());
@@ -234,7 +250,8 @@ export async function getEldLog({
 					data.endDate = new Date(data.endDate);
 					getEldLog(data);
 				});
-				$('main table, main form').remove();
+				table.tBodies.item(0).append(...rows);
+				$('main > table, main > form').remove();
 				document.querySelector('main').append(content, form);
 			}
 		} else {
