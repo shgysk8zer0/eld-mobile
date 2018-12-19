@@ -8,8 +8,10 @@ window.isLoggedIn = isLoggedIn;
 
 window.addEventListener('popstate', async event => {
 	console.log(event);
-	if (sessionStorage.hasOwnProperty('token')) {
+	if (isLoggedIn()) {
 		setTableData(event.state);
+	} else {
+		history.replaceState({}, document.title, location.pathname);
 	}
 });
 

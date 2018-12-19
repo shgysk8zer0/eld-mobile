@@ -248,16 +248,7 @@ export async function setTableData({
 		table.tBodies.item(0).append(...rows);
 		$('main > table, main > form').remove();
 		document.querySelector('main').append(content, form);
-	} else {
-		console.info({json, token, driverid, startDate, endDate, test: {
-			driverid: Number.isNaN(driverid),
-			loggedIn: isLoggedIn(),
-		}});
-		console.trace();
-		debugger;
-
 	}
-
 }
 
 export async function getEldLog({
@@ -319,12 +310,17 @@ export function loginHandler(event) {
 	$('dialog[open]').close();
 	$('[data-click="login"], [data-click="register"]').hide();
 	$('[data-click="logout"]').unhide();
+	const url = new URL(location.href);
+	const startDate = url.searchParams.has('from') ? new Date(url.searchParams.get('from')) : undefined;
+	const endDate = url.searchParams.has('to') ? new Date(url.searchParams.get('to')) : new Date();
 	if (navigator.onLine) {
 		getEldLog({
 			token: sessionStorage.getItem('token'),
+			startDate,
+			endDate,
 			driverid: parseInt(sessionStorage.getItem('driverId')),
 		});
-	} else if (Array.isArray(history.state.json)) {
+	} else if (Array.isArray(history.state.json) && history.state.startDate === startDate && history.state.endDate === endDate) {
 		setTableData(history.state);
 	}
 }
