@@ -1,6 +1,6 @@
 import {API, ICONS} from './consts.js';
 import {notify, $, getImports} from './std-js/functions.js';
-import {alert} from './std-js/functions.js';
+import {alert} from './std-js/asyncDialog.js';
 
 export async function loadImports() {
 	const imports = await getImports();
@@ -186,16 +186,11 @@ export async function getEldLog({
 					return opt;
 				});
 
-				list.append(...listOpts);
-				table.caption.append(search);
-				[...table.tHead.rows].forEach(row => {
-					const tr = row.cloneNode(true);
-					tr.classList.remove('sticky');
-					table.tHead.append(tr);
+				$('form[name="locationSearch"]', search).submit(event => event.preventDefault());
+				$('form[name="locationSearch"]', search).reset(event => {
+					[...event.target.closest('table').tBodies.item(0).rows].forEach(row => row.hidden = false)
 				});
 
-				$('form', search).submit(event => event.preventDefault());
-				$('form', search).reset(event => [...event.target.closest('table').tBodies.item(0).rows].forEach(row => row.hidden = false));
 				$('input[type="search"]', search).change(event => {
 					const table = event.target.closest('table');
 					[...table.tBodies.item(0).rows].forEach(async row => {
@@ -218,6 +213,7 @@ export async function getEldLog({
 					value: startDate.toISOString().split('T')[0],
 					max: now,
 				});
+
 				$('input[name="startDate"]', form).change(event => {
 					const input = event.target.form.querySelector('input[name="endDate"]');
 					const date = event.target.value;
@@ -228,6 +224,7 @@ export async function getEldLog({
 				}, {
 					passive: true,
 				});
+
 				$('input[name="endDate"]', form).change(event => {
 					const input = event.target.form.querySelector('input[name="startDate"]');
 					const date = event.target.value;
@@ -238,10 +235,12 @@ export async function getEldLog({
 				}, {
 					passive: true,
 				});
+
 				$('input[name="endDate"]', form).attr({
 					value: endDate.toISOString().split('T')[0],
 					max: now,
 				});
+
 				$('form', form).submit(async event => {
 					event.preventDefault();
 					const data = Object.fromEntries(new FormData(event.target).entries());
@@ -250,6 +249,15 @@ export async function getEldLog({
 					data.endDate = new Date(data.endDate);
 					getEldLog(data);
 				});
+
+				[...table.tHead.rows].forEach(row => {
+					const tr = row.cloneNode(true);
+					tr.classList.remove('sticky');
+					table.tFoot.append(tr);
+				});
+
+				list.append(...listOpts);
+				table.caption.append(search);
 				table.tBodies.item(0).append(...rows);
 				$('main > table, main > form').remove();
 				document.querySelector('main').append(content, form);
