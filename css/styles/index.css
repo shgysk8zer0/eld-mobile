@@ -36,6 +36,10 @@ td, th {
 	animation-name: spin;
 }
 
+.full-width {
+	width: 100%;
+}
+
 dialog:not([open]) .animation-spin {
 	animation-play-state: paused;
 }
