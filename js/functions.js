@@ -182,7 +182,7 @@ export async function setTableData({
 			const table = event.target.closest('table');
 			[...table.tBodies.item(0).rows].forEach(async row => {
 				const loc = row.querySelector('[data-field="location"]');
-				row.hidden = ! loc.textContent.includes(event.target.value);
+				row.hidden = ! loc.textContent.toLowerCase().includes(event.target.value.toLowerCase());
 			});
 		}, {
 			passive: true,
