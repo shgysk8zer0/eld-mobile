@@ -80,56 +80,48 @@ export async function login({
 	headers.set('Accept', 'application/json');
 	spinner.showModal();
 
-	try {
-		await whenOnline();
-		const resp = await fetch(url, {
-			headers,
-			method: 'POST',
-			mode: 'cors',
-			body: JSON.stringify([{driver_code, driver_pin, eld}]),
-			cache: 'no-cache',
-		});
+	await whenOnline();
+	const resp = await fetch(url, {
+		headers,
+		method: 'POST',
+		mode: 'cors',
+		body: JSON.stringify([{driver_code, driver_pin, eld}]),
+		cache: 'no-cache',
+	});
 
-		if (resp.ok) {
-			const json = await resp.json();
-			if ('error' in json) {
-				throw new Error(`${json.message} [${json.error}]`);
-			} else {
-				document.dispatchEvent(new CustomEvent('login', {
-					detail: {
-						driverCode: driver_code,
-						driverId: parseInt(json.driverid),
-						driverName: json.driversname,
-						token: json.token,
-						tracking: json.tracking === '1',
-					}
-				}));
-
-				notify('Login successful', {
-					body: `Welcome back, ${json.driversname}`,
-					icon: ICONS.AVATAR,
-				}).catch(console.error);
-
-				if (store && window.PasswordCredential instanceof Function) {
-					const creds = new PasswordCredential({
-						id: driver_code,
-						name: json.driversname,
-						password: driver_pin,
-						iconURL: ICONS.AVATAR,
-					});
-					await navigator.credentials.store(creds);
-				}
-
-				return json;
-			}
+	if (resp.ok) {
+		const json = await resp.json();
+		if ('error' in json) {
+			throw new Error(`${json.message} [${json.error}]`);
 		} else {
-			throw new Error(`${resp.url} [${resp.status} ${resp.statusText}]`);
+			document.dispatchEvent(new CustomEvent('login', {
+				detail: {
+					driverCode: driver_code,
+					driverId: parseInt(json.driverid),
+					driverName: json.driversname,
+					token: json.token,
+					tracking: json.tracking === '1',
+				}
+			}));
+
+			notify('Login successful', {
+				body: `Welcome back, ${json.driversname}`,
+				icon: ICONS.AVATAR,
+			}).catch(console.error);
+
+			if (store && window.PasswordCredential instanceof Function) {
+				const creds = new PasswordCredential({
+					id: driver_code,
+					name: json.driversname,
+					password: driver_pin,
+					iconURL: ICONS.AVATAR,
+				});
+				await navigator.credentials.store(creds);
+			}
+			return json;
 		}
-	} catch(err) {
-		console.error(err);
-		alert(err.message);
-	} finally {
-		spinner.close();
+	} else {
+		throw new Error(`${resp.url} [${resp.status} ${resp.statusText}]`);
 	}
 }
 

@@ -60,8 +60,22 @@ ready().then(async () => {
 
 	document.forms.login.addEventListener('submit', async event => {
 		event.preventDefault();
+		const dialog = event.target.closest('dialog');
 		const data = Object.fromEntries(new FormData(event.target).entries());
-		login(data).then(() => event.target.reset());
+		if (dialog instanceof HTMLElement) {
+			dialog.close();
+		}
+		try {
+			await login(data);
+			event.target.reset();
+			$('dialog[open]').close();
+		} catch (err) {
+			console.error(err);
+			await $('dialog[open]').close();
+			dialog.showModal();
+			await $(dialog).shake({duration: 150, iterations: 3});
+			event.target.querySelector('input:not([type="hidden"])').focus();
+		}
 	});
 
 	document.forms.sendEmail.addEventListener('submit', emailSubmitHandler);
