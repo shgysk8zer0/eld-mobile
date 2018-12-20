@@ -7,7 +7,6 @@ registerServiceWorker(document.documentElement.dataset.serviceWorker).catch(cons
 window.isLoggedIn = isLoggedIn;
 
 window.addEventListener('popstate', async event => {
-	console.log(event);
 	if (isLoggedIn()) {
 		setTableData(event.state);
 	} else {

@@ -9,10 +9,30 @@ export async function loadImports() {
 
 export async function emailSubmitHandler(event) {
 	event.preventDefault();
-	const data = Object.fromEntries(new FormData(event.target).entries());
-	console.log(data);
-	event.target.reset();
-	return data;
+	const body = [Object.fromEntries(new FormData(event.target).entries())];
+	const url = new URL('m_eldlog', API);
+	const headers = new Headers();
+	headers.set('Content-Type', 'application/json');
+	headers.set('Accept', 'application/json');
+	const resp = await fetch(url, {
+		mode: 'cors',
+		method: 'POST',
+		headers,
+		body: JSON.stringify(body),
+	});
+
+	if (resp.ok) {
+		const data = await resp.json();
+		if ('error' in data) {
+			throw new Error(`${data.message} [${data.error}]`);
+		} else {
+			console.log(data);
+			event.target.reset();
+			alert(data.message);
+		}
+	} else {
+		throw new Error(`${resp.url} [${resp.status} ${resp.statusText}]`);
+	}
 }
 
 export async function whenOnline() {
@@ -192,9 +212,8 @@ export async function setTableData({
 		$('input[name="token"]', form).attr({value: token});
 		$('input[name="driverid"]', form).attr({value: driverid});
 		$('[data-click="email"]', table).click(() => $('#email-dialog').showModal());
-		$('form[name="sendEmail"] [name="driverid"]').attr({value: driverid});
-		$('form[name="sendEmail"] [name="fromdate"]').attr({value: startDate.toISOString()});
-		$('form[name="sendEmail"] [name="thrudate"]').attr({value: endDate.toISOString()});
+		$('form[name="sendEmail"] [name="from_option"]').attr({value: startDate.toISOString()});
+		$('form[name="sendEmail"] [name="thru_option"]').attr({value: endDate.toISOString()});
 		$('form[name="sendEmail"] [name="token"]').attr({value: token});
 		$('input[name="startDate"]', form).attr({
 			value: startDate.toISOString().split('T')[0],
